@@ -1,13 +1,9 @@
-<!-- Left side column. contains the logo and sidebar -->
-<aside class="main-sidebar">
+<div class="col-lg-3" style="margin-top: 50px">
+    <h2 class="my-4">Produtos</h2>
+    <div class="list-group">
+        <a href="#" class="list-group-item">Category 1</a>
+        <a href="#" class="list-group-item">Category 2</a>
+        <a href="#" class="list-group-item">Category 3</a>
+    </div>
 
-    <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
-
-        <!-- Sidebar Menu -->
-{{--        <t-menu></t-menu>--}}
-
-        <!-- /.sidebar-menu -->
-    </section>
-    <!-- /.sidebar -->
-</aside>
+</div>
