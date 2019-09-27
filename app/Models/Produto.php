@@ -26,4 +26,14 @@ class Produto extends BaseModel
     {
         return $this->hasOne('App\Models\Categoria', 'cat_id', 'pro_cat_id');
     }
+
+    public function setProValorAttribute($value)
+    {
+        $this->attributes['pro_valor'] = str_replace(['.', ',', 'R$ '], ['', '.', ''], $value);
+    }
+
+    public function getProValorAttribute($value)
+    {
+        return number_format($value, 2, ',', '');
+    }
 }

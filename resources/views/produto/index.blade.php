@@ -1,10 +1,19 @@
 @extends('template.base')
 
 @section("content")
-    <div class="container" style="margin-top: 87px">
+    <div class="row">
         <div class="col-lg-12">
-            <div class="text-right">
-                <a href="{{url('/produtos/create')}}" class="btn btn-w-md btn-primary">Novo</a>
+            <div class="view-header">
+                <div class="header-icon">
+                    <i class="fa fa-cube"></i>
+                </div>
+                <div class="header-title">
+                    <h3 class="m-b-xs">Produtos</h3>
+                    <small>Lista de Produtos</small>
+                </div>
+                <div class="text-right">
+                    <a href="{{url('/produtos/create')}}" class="btn btn-w-md btn-primary">Novo</a>
+                </div>
             </div>
             <hr>
         </div>

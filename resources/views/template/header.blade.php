@@ -1,27 +1,34 @@
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container">
-        <a class="navbar-brand" href="#">Start Bootstrap</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home
-                        <span class="sr-only">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Services</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
-                </li>
-            </ul>
+<!-- Header-->
+<nav class="navbar navbar-expand-md navbar-default fixed-top">
+    <div class="navbar-header">
+        <div id="mobile-menu">
+            <div class="left-nav-toggle">
+                <a href="#">
+                    <i class="stroke-hamburgermenu"></i>
+                </a>
+            </div>
         </div>
+        <a class="navbar-brand" href="#" style="font-size:15px"> 
+        DevSquad
+        </a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+        <div class="left-nav-toggle">
+            <a href="">
+                <i class="stroke-hamburgermenu"></i>
+            </a>
+        </div>
+        <form class="navbar-form mr-auto">
+            <input type="text" class="form-control" placeholder="Search" style="width: 175px">
+        </form>
+        <ul class="nav navbar-nav">
+            <li class="nav-item profil-link">
+                <a href="#">
+                    <span class="profile-address">web.juniorfreitas@gmail.com</span>
+                    <img src="{{asset('/theme/images/profile.jpg')}}" class="rounded-circle" alt="">
+                </a>
+            </li>
+        </ul>
     </div>
 </nav>
+<!-- End header-->

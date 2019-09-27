@@ -1,53 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ config('app.name') }}</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="stylesheet" href="{{ asset('plugins/bootstrap/css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/fontawesome/css/font-awesome.css') }}">
-    {{--    <link rel="stylesheet" href="{{ asset('plugins/sweetalert2/dist/sweetalert2.min.css') }}">--}}
-    <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900' rel='stylesheet' type='text/css'>
 
+    <!-- Page title -->
+    <title>DevSquad | Desafio</title>
+
+    <!-- Vendor styles -->
+    <link rel="stylesheet" href="{{asset('plugins/fontawesome/css/font-awesome.css')}}"/>
+    <link rel="stylesheet" href="{{asset('plugins/animate.css/animate.css')}}"/>
+    <link rel="stylesheet" href="{{asset('plugins/bootstrap/css/bootstrap.css')}}"/>
+    <link rel="stylesheet" href="{{asset('plugins/toastr/toastr.min.css')}}"/>
+
+    <!-- App styles -->
+    <link rel="stylesheet" href="{{asset('css/styles/pe-icons/pe-icon-7-stroke.css')}}"/>
+    <link rel="stylesheet" href="{{asset('css/styles/pe-icons/helper.css')}}"/>
+    <link rel="stylesheet" href="{{asset('css/styles/stroke-icons/style.css')}}"/>
+    <link rel="stylesheet" href="{{asset('css/styles/style.css')}}">
+    <style>
+        button, [type="button"], [type="reset"], [type="submit"] {
+            -webkit-appearance: none;
+        }
+        .content > div {
+            opacity: unset;
+        }
+    </style>
     @yield('css')
 </head>
-<body class="">
-<div id="app">
-    @include('template.header')
+<body>
 
-    <div class="container">
+<div class="wrapper">
 
-        <div class="row">
-            @include('template.sidebar')
+@include('template.header')
 
-            <div class="col-lg-9">
-                @yield('content')
-            </div>
+@include('template.sidebar')
+
+<!-- Main content-->
+    <section class="content">
+        <div class="container-fluid">
+            @yield("content")
         </div>
-    </div>
+    </section>
+    <!-- End main content-->
 
-    <script src="{{ asset('plugins/jquery/dist/jquery.min.js') }}"></script>
-    <script src="{{ asset('plugins/bootstrap/js/bootstrap.min.js') }}"></script>
-    {{--<script src="{{ asset('plugins/sweetalert2/dist/sweetalert2.min.js') }}"></script>--}}
-    <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
+</div>
 
-    <script type="text/javascript">
-        @if(session('message'))
-        toastr.success("{{session('message')}}", 'Sucesso!')
-        @endif
-
-        @if($errors->has('error'))
-        toastr.warning("{{$errors->first('error')}}", 'Erro!')
-        @endif
-
-        @if($errors->has('exception'))
-        toastr.error("{{$errors->first('exception')}}", 'Erro!')
-        @endif
-    </script>
+<!-- Vendor scripts -->
+<script src="{{asset('plugins/jquery/dist/jquery.min.js')}}"></script>
+<script src="{{asset('plugins/bootstrap/js/bootstrap.min.js')}}"></script>
+<script src="{{asset('plugins/toastr/toastr.min.js')}}"></script>
+<script src="{{asset('js/custom.js')}}"></script>
+<!-- App scripts -->
+<script>
+    var message = '{{ Session::has('message')}}'
+    if(message) {
+        toastr.success('{{ Session::get('message')}}', "Sucesso");
+    }
+    var error = '{{ Session::has('error')}}'
+    if(error) {
+        toastr.danger('{{ Session::get('error')}}', "Ooops!");
+    }
+</script>
 @yield('js')
 </body>
+
 </html>

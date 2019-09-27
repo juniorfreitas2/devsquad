@@ -1,9 +1,23 @@
-<div class="col-lg-3" style="margin-top: 50px">
-    <h2 class="my-4">Produtos</h2>
-    <div class="list-group">
-        <a href="#" class="list-group-item">Category 1</a>
-        <a href="#" class="list-group-item">Category 2</a>
-        <a href="#" class="list-group-item">Category 3</a>
-    </div>
-
-</div>
+<!-- Navigation-->
+<aside class="navigation">
+    <nav>
+        <ul class="nav luna-nav">
+            <li class="nav-category">
+                Main
+            </li>
+            <li class="active">
+                <a href="{{url('/')}}">Dashboard</a>
+            </li>
+            <li class="">
+                <a href="{{url('/produtos')}}">Produtos</a>
+            </li>
+            <li class="">
+                <a href="{{url('/categorias')}}">Categorias</a>
+            </li>
+            <li class="">
+                <a href="{{url('/usuarios')}}">Usuarios</a>
+            </li>
+        </ul>
+    </nav>
+</aside>
+<!-- End navigation-->

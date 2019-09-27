@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return "Hello world";
+    return view('dashboard');
 });
 
 Route::resource('produtos','ProdutoController');

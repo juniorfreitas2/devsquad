@@ -17,7 +17,16 @@
                     </div>
                 </div>
 
-                <div class="form-group col-md-3 @if ($errors->has('pro_valor')) has-error @endif">
+                <div class="form-group col-md-3 @if ($errors->has('pro_cat_id')) has-error @endif">
+                    {!! Form::label('pro_cat_id', 'Categoria*', ['class' => 'control-label']) !!}
+                    <div class="controls">
+                        {!! Form::select('pro_cat_id',$categorias,old('pro_cat_id'), ['class' => 'form-control', 'placeholder'=>'Selecione']) !!}
+                        @if ($errors->has('pro_cat_id')) <p class="help-block">Campo Obrigatório</p> @endif
+                    </div>
+
+                </div>
+
+                <div class="form-group col-md-2 @if ($errors->has('pro_valor')) has-error @endif">
                     {!! Form::label('pro_valor', 'Valor*', ['class' => 'control-label']) !!}
                     <div class="controls">
                         {!! Form::text('pro_valor', old('pro_valor'), ['class' => 'form-control', 'id'=>'pro_valor']) !!}
@@ -25,13 +34,23 @@
                     </div>
                 </div>
 
-                <div class="form-group col-md-2 @if ($errors->has('pro_max_desconto')) has-error @endif">
-                    {!! Form::label('pro_max_desconto', 'Max. desconto*', ['class' => 'control-label']) !!}
+                <div class="form-group col-md-12 @if ($errors->has('pro_descricao')) has-error @endif">
+                    {!! Form::label('pro_descricao', 'Descrição*', ['class' => 'control-label']) !!}
                     <div class="controls">
-                        {!! Form::text('pro_max_desconto',old('pro_max_desconto'), ['class' => 'form-control', 'id'=>'pro_desconto']) !!}
-                        @if ($errors->has('pro_max_desconto')) <p class="help-block">Campo Obrigatório</p> @endif
-                        <small>Valor em porcentagem</small>
+                        {!! Form::textarea('pro_descricao', old('pro_descricao'), ['class' => 'form-control', 'rows'=>'3']) !!}
+                        @if ($errors->has('pro_descricao')) <p class="help-block">Campo Obrigatório</p> @endif
                     </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                {!! Form::label('pro_imagem', 'Adicione uma imagem', ['class' => 'control-label']) !!}
+                <div class=" form-group ">
+                    <div class="form-group">
+                        <input name="pro_imagem" type="file" class="form-control-file" id="exampleFormControlFile1">
+                    </div>
+                    @if($errors->has('pro_imagem'))
+                        <span class="help-block">{{ $errors->first('pro_imagem') }}</span>
+                    @endif
                 </div>
             </div>
         </div>
@@ -53,10 +72,6 @@
                 prefix: 'R$ ',
                 decimal:",", 
                 thousands:"."
-            });
-            $('#pro_desconto').maskMoney({
-                suffix: '% ',
-                precision:0
             });
         });
     </script>

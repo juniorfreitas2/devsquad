@@ -26,18 +26,15 @@ class ProdutoController extends BaseController
 
     public function create()
     {
-        return view('produto.create');
+        $categorias = $this->categoriaRepository->all()->pluck('cat_nome', 'cat_id');
+
+        return view('produto.create', compact('categorias'));
     }
 
     public function store(ProdutoRequest $request)
     {
         try {
-            $data = $request->all();
-            
-            //Converte valor em padrao americano
-            $data['pro_valor'] =  str_replace(['.', ',', 'R$ '], ['', '.', ''], $data['pro_valor']);
-
-            $produto = $this->produtoRepository->create($data);
+            $produto = $this->produtoRepository->create($request->all());
             
             if (!$produto) {
                 return redirect()->back()->withInput($request->all())->with('error', 'Produto não existe');
@@ -55,30 +52,26 @@ class ProdutoController extends BaseController
     public function edit($id)
     {
         $produto = $this->produtoRepository->find($id);
-            
+
         if (!$produto) {
             return redirect()->back()->with('error', 'Produto não existe');
         }
-        //converte pro formato brasileiro
-        $produto->pro_valor = number_format($produto->pro_valor , 2, ',', '.');
 
-        return view('produto.edit', compact('produto'));
+        $categorias = $this->categoriaRepository->all()->pluck('cat_nome', 'cat_id');
+
+        return view('produto.edit', compact('produto','categorias'));
     }
 
     public function update(ProdutoRequest $request, $id)
     {
         try {
-            $data = $this->produtoRepository->find($id);
+            $produto = $this->produtoRepository->find($id);
 
-            if (!$data) {
+            if (!$produto) {
                 return redirect()->back()->withInput($request->all())->with('error', 'Produto não existe');
             }
-        
-            //Converte valor em padrao americano
-            $request['pro_valor'] =  str_replace(['.', ',', 'R$ '], ['', '.', ''], $request['pro_valor']);
-            $request['pro_max_desconto'] =  str_replace(['%'], [''], $request['pro_max_desconto']);
-            
-            if (!$this->produtoRepository->update($request->all(), $data->pro_id, 'pro_id')){
+
+            if (!$produto->update($request->all())){
                 return redirect()->back()->withInput($request->all())->with('error', 'Erro ao atualizar');
             }
 
