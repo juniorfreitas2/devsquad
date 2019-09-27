@@ -1,20 +1,32 @@
 <template>
     <div class="">
         <div id="table-wrapper" class="ui container">
-            <h2><strong>&lt;Vuetable-2&gt;</strong> with Bootstrap 3</h2>
             <vuetable ref="vuetable"
-                      api-url="https://vuetable.ratiw.net/api/users"
+                      :api-url="url"
                       :fields="fields"
                       :sort-order="sortOrder"
                       :css="css.table"
                       pagination-path=""
                       :per-page="3"
                       @vuetable:pagination-data="onPaginationData"
-                      @vuetable:loading="onLoading"
-                      @vuetable:loaded="onLoaded"
             >
-            </vuetable>
+                <template slot="actions" scope="props">
+                    <div class="table-button-container">
+                        <button class="btn btn-warning btn-sm" @click="editRow(props.rowData)">
+                            <span class="fa fa-pencil"></span> Edit
+                        </button>&nbsp;&nbsp;
 
+                        <button class="btn btn-danger btn-sm" @click="deleteRow(props.rowData)">
+                            <span class="fa fa-trash"></span> Delete
+                        </button>&nbsp;&nbsp;
+                    </div>
+                </template>
+
+            </vuetable>
+            <vuetable-pagination ref="pagination"
+                                 :css="css.pagination"
+                                 @vuetable-pagination:change-page="onChangePage"
+            ></vuetable-pagination>
         </div>
     </div>
 </template>
@@ -28,27 +40,10 @@
             vuetable: Vuetable,
             'vuetable-pagination': VuetablePagination
         },
+        props: ['url', 'userFields', 'primaryKey'],
         data () {
             return {
-                fields: [
-                    {
-                        name: 'name',
-                        title: '<span class="orange glyphicon glyphicon-user"></span> Full Name',
-                        sortField: 'name'
-                    },
-                    {
-                        name: 'email',
-                        title: 'Email',
-                        sortField: 'email'
-                    },
-                    'birthdate','nickname',
-                    {
-                        name: 'gender',
-                        title: 'Gender',
-                        sortField: 'gender'
-                    },
-                    '__slot:actions'
-                ],
+                fields: [],
                 sortOrder: [
                     { field: 'name', direction: 'asc' }
                 ],
@@ -56,9 +51,9 @@
                     table: {
                         tableClass: 'table table-striped table-bordered table-hovered',
                         loadingClass: 'loading',
-                        ascendingIcon: 'glyphicon glyphicon-chevron-up',
-                        descendingIcon: 'glyphicon glyphicon-chevron-down',
-                        handleIcon: 'glyphicon glyphicon-menu-hamburger',
+                        ascendingIcon: 'fa fa-sort-asc',
+                        descendingIcon: 'fa fa-sort-desc',
+                        handleIcon: 'fa fa-trash',
                     },
                     pagination: {
                         infoClass: 'pull-left',
@@ -77,12 +72,40 @@
                 }
             }
         },
-        computed:{
-            /*httpOptions(){
-              return {headers: {'Authorization': "my-token"}} //table props -> :http-options="httpOptions"
-            },*/
-        },
         methods: {
+            assocFields () {
+                const userFields = this.userFields
+                for (let field in userFields) {
+                    let fieldInfo = {
+                        name: field,
+                        title: userFields[field],
+                        dataClass: this.getDataClass(field),
+                        titleClass: this.getFieldClass(field)
+                    }
+                    if (this.mutators && field in this.mutators) {
+                        fieldInfo.callback = this.applyMutator(this.mutators[field])
+                    }
+
+                    this.fields.push(fieldInfo)
+                }
+                // this.fields.push({
+                //     name: '__slot:actions',
+                //     title: '#',
+                //     dataClass: 'data-grid-actions'
+                // })
+            },
+            getDataClass (field) {
+                if (this.dataCss) {
+                    return dataCss[field]
+                }
+                return ''
+            },
+            getFieldClass (field) {
+                if (this.titleCss) {
+                    return this.titleCss[field]
+                }
+                return ''
+            },
             onPaginationData (paginationData) {
                 this.$refs.pagination.setPaginationData(paginationData)
             },
@@ -95,11 +118,9 @@
             deleteRow(rowData){
                 alert("You clicked delete on"+ JSON.stringify(rowData))
             },
-            onLoading() {
-                console.log('loading... show your spinner here')
-            },
-            onLoaded() {
-                console.log('loaded! .. hide your spinner here')
+            created () {
+                this.assocFields();
+                // this.assocUserFilters()
             }
         }
     }

@@ -16,6 +16,11 @@ abstract class BaseRepository
         return $this->model->find($id);
     }
 
+    public function paginate($qtd)
+    {
+        return $this->model->paginate($qtd);
+    }
+
     public function create(array $data)
     {
         return $this->model->create($data);

@@ -1883,6 +1883,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1890,21 +1902,10 @@ __webpack_require__.r(__webpack_exports__);
     vuetable: vuetable_2_src_components_Vuetable_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     'vuetable-pagination': vuetable_2_src_components_VuetablePagination_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
+  props: ['url', 'userFields', 'primaryKey'],
   data: function data() {
     return {
-      fields: [{
-        name: 'name',
-        title: '<span class="orange glyphicon glyphicon-user"></span> Full Name',
-        sortField: 'name'
-      }, {
-        name: 'email',
-        title: 'Email',
-        sortField: 'email'
-      }, 'birthdate', 'nickname', {
-        name: 'gender',
-        title: 'Gender',
-        sortField: 'gender'
-      }, '__slot:actions'],
+      fields: [],
       sortOrder: [{
         field: 'name',
         direction: 'asc'
@@ -1913,9 +1914,9 @@ __webpack_require__.r(__webpack_exports__);
         table: {
           tableClass: 'table table-striped table-bordered table-hovered',
           loadingClass: 'loading',
-          ascendingIcon: 'glyphicon glyphicon-chevron-up',
-          descendingIcon: 'glyphicon glyphicon-chevron-down',
-          handleIcon: 'glyphicon glyphicon-menu-hamburger'
+          ascendingIcon: 'fa fa-sort-asc',
+          descendingIcon: 'fa fa-sort-desc',
+          handleIcon: 'fa fa-trash'
         },
         pagination: {
           infoClass: 'pull-left',
@@ -1934,12 +1935,44 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
-  computed: {
-    /*httpOptions(){
-      return {headers: {'Authorization': "my-token"}} //table props -> :http-options="httpOptions"
-    },*/
-  },
   methods: {
+    assocFields: function assocFields() {
+      var userFields = this.userFields;
+
+      for (var field in userFields) {
+        var fieldInfo = {
+          name: field,
+          title: userFields[field],
+          dataClass: this.getDataClass(field),
+          titleClass: this.getFieldClass(field)
+        };
+
+        if (this.mutators && field in this.mutators) {
+          fieldInfo.callback = this.applyMutator(this.mutators[field]);
+        }
+
+        this.fields.push(fieldInfo);
+      } // this.fields.push({
+      //     name: '__slot:actions',
+      //     title: '#',
+      //     dataClass: 'data-grid-actions'
+      // })
+
+    },
+    getDataClass: function getDataClass(field) {
+      if (this.dataCss) {
+        return dataCss[field];
+      }
+
+      return '';
+    },
+    getFieldClass: function getFieldClass(field) {
+      if (this.titleCss) {
+        return this.titleCss[field];
+      }
+
+      return '';
+    },
     onPaginationData: function onPaginationData(paginationData) {
       this.$refs.pagination.setPaginationData(paginationData);
     },
@@ -1952,11 +1985,8 @@ __webpack_require__.r(__webpack_exports__);
     deleteRow: function deleteRow(rowData) {
       alert("You clicked delete on" + JSON.stringify(rowData));
     },
-    onLoading: function onLoading() {
-      console.log('loading... show your spinner here');
-    },
-    onLoaded: function onLoaded() {
-      console.log('loaded! .. hide your spinner here');
+    created: function created() {
+      this.assocFields(); // this.assocUserFilters()
     }
   }
 });
@@ -22849,40 +22879,73 @@ var render = function() {
       "div",
       { staticClass: "ui container", attrs: { id: "table-wrapper" } },
       [
-        _vm._m(0),
-        _vm._v(" "),
         _c("vuetable", {
           ref: "vuetable",
           attrs: {
-            "api-url": "https://vuetable.ratiw.net/api/users",
+            "api-url": _vm.url,
             fields: _vm.fields,
             "sort-order": _vm.sortOrder,
             css: _vm.css.table,
             "pagination-path": "",
             "per-page": 3
           },
-          on: {
-            "vuetable:pagination-data": _vm.onPaginationData,
-            "vuetable:loading": _vm.onLoading,
-            "vuetable:loaded": _vm.onLoaded
-          }
+          on: { "vuetable:pagination-data": _vm.onPaginationData },
+          scopedSlots: _vm._u([
+            {
+              key: "actions",
+              fn: function(props) {
+                return [
+                  _c("div", { staticClass: "table-button-container" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-warning btn-sm",
+                        on: {
+                          click: function($event) {
+                            return _vm.editRow(props.rowData)
+                          }
+                        }
+                      },
+                      [
+                        _c("span", { staticClass: "fa fa-pencil" }),
+                        _vm._v(" Edit\n                    ")
+                      ]
+                    ),
+                    _vm._v("  \n\n                    "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger btn-sm",
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteRow(props.rowData)
+                          }
+                        }
+                      },
+                      [
+                        _c("span", { staticClass: "fa fa-trash" }),
+                        _vm._v(" Delete\n                    ")
+                      ]
+                    ),
+                    _vm._v("  \n                ")
+                  ])
+                ]
+              }
+            }
+          ])
+        }),
+        _vm._v(" "),
+        _c("vuetable-pagination", {
+          ref: "pagination",
+          attrs: { css: _vm.css.pagination },
+          on: { "vuetable-pagination:change-page": _vm.onChangePage }
         })
       ],
       1
     )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("h2", [
-      _c("strong", [_vm._v("<Vuetable-2>")]),
-      _vm._v(" with Bootstrap 3")
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -36872,16 +36935,19 @@ module.exports = function(module) {
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _components_DataGrid_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/DataGrid.vue */ "./resources/js/components/DataGrid.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-Vue.component('data-grid', __webpack_require__(/*! ./components/DataGrid.vue */ "./resources/js/components/DataGrid.vue"));
+
+Vue.component('teste', _components_DataGrid_vue__WEBPACK_IMPORTED_MODULE_0__["default"]);
 var app = new Vue({
   el: '#app',
-  methods: {},
   data: {
     message: 'Hello Vue!'
   }

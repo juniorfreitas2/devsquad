@@ -40,8 +40,8 @@
 @include('template.sidebar')
 
 <!-- Main content-->
-    <section class="content">
-        <div class="container-fluid">
+    <section id="app" class="content">
+        <div id="app" class="container-fluid">
             @yield("content")
         </div>
     </section>
@@ -54,6 +54,7 @@
 <script src="{{asset('plugins/bootstrap/js/bootstrap.min.js')}}"></script>
 <script src="{{asset('plugins/toastr/toastr.min.js')}}"></script>
 <script src="{{asset('js/custom.js')}}"></script>
+<script src="{{asset('js/app.js')}}"></script>
 <!-- App scripts -->
 <script>
     var message = '{{ Session::has('message')}}'

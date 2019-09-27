@@ -2,12 +2,12 @@ require('./bootstrap');
 
 window.Vue = require('vue')
 
-Vue.component('data-grid', require('./components/DataGrid.vue'))
+import ExampleComponent from './components/DataGrid.vue';
+
+Vue.component('teste', ExampleComponent)
 
 const app = new Vue({
     el: '#app',
-    methods: {
-    },
     data: {
         message: 'Hello Vue!'
     }

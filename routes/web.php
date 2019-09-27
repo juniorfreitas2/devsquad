@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 
 Route::resource('produtos','ProdutoController');
+Route::get('all','Api\ProdutoController@list');
