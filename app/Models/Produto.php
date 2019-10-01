@@ -37,13 +37,4 @@ class Produto extends BaseModel
         return number_format($value, 2, ',', '');
     }
 
-    public function getProCatIdAttribute($value)
-    {
-        $cat = Categoria::find($value);
-
-        if(!$cat)
-            return $value;
-
-        return $cat->cat_nome;
-    }
 }

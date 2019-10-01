@@ -23,11 +23,16 @@ class ProdutoRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'pro_nome' => 'required|max:64|unique:produtos,pro_nome',
             'pro_valor' => 'required',
             'pro_descricao' => 'required',
             'pro_cat_id' => 'required'
         ];
+
+        if($this->method() == 'PUT')
+            $rules['pro_nome'] = 'required|max:64|unique:produtos,pro_nome,'.$this->pro_id.',pro_id';
+        
+        return $rules;
     }
 }

@@ -6,6 +6,7 @@ use App\Core\BaseController;
 use App\Repository\CategoriaRepository;
 use App\Repository\ProdutoRepository;
 use App\Http\Requests\ProdutoRequest;
+use Illuminate\Http\Request;
 
 class ProdutoController extends BaseController
 {
@@ -17,16 +18,24 @@ class ProdutoController extends BaseController
         $this->categoriaRepository = $categoriaRepository;
     }
 
-    public function index()
+    public function all()
     {
-        return view('produto.index', compact('produtos'));
+        $produtos = $this->produtoRepository->getProdutosFiltered();
+
+        return Response($produtos, 200);
+    }
+
+    public function index(Request $request)
+    {
+        return view('produto.index');
     }
 
     public function create()
     {
+        $produto = '';
         $categorias = $this->categoriaRepository->all()->pluck('cat_nome', 'cat_id');
 
-        return view('produto.create', compact('categorias'));
+        return view('produto.create', compact('categorias', 'produto'));
     }
 
     public function store(ProdutoRequest $request)
@@ -37,7 +46,7 @@ class ProdutoController extends BaseController
             if (!$produto)
                 return Response(['message' =>'Produto não existe', 500]);
 
-            return Response(['message' =>'Produto salvo com sucesso', 200]);
+            return redirect()->route('produtos.show', [$produto->pro_id])->with('message', 'Salvo com sucesso');
         } catch (\Exception $e) {
             if (config('app.debug')) {
                 throw $e;
@@ -58,6 +67,18 @@ class ProdutoController extends BaseController
         return view('produto.edit', compact('produto','categorias'));
     }
 
+    public function show($id)
+    {
+        $produto = $this->produtoRepository->find($id);
+
+        if (!$produto)
+            return Response(['message' =>'Produto não existe', 500]);
+
+        $categorias = $this->categoriaRepository->all()->pluck('cat_nome', 'cat_id');
+
+        return view('produto.show', compact('produto','categorias'));
+    }
+
     public function update(ProdutoRequest $request, $id)
     {
         try {
@@ -66,11 +87,11 @@ class ProdutoController extends BaseController
             if (!$produto)
                 return Response(['message' =>'Produto não existe', 500]);
 
-
             if (!$produto->update($request->all()))
                 return Response(['message' =>'Erro ao atualizar Produto', 500]);
 
-            return Response(['message' =>'Produto salvo com sucesso', 200]);
+            return Response(['message' =>'Produto atualizado', 200]);
+
         } catch (\Exception $e) {
             if (config('app.debug')) {
                 throw $e;
@@ -84,11 +105,10 @@ class ProdutoController extends BaseController
     public function destroy($id)
     {
         try {
-
             if (!$this->produtoRepository->delete($id))
-                return Response(['message' =>'Produto excluido', 200]);
+                return Response(['message' =>'Erro ao  excluir produto', 500]);
 
-            return Response(['message' =>'Erro ao  excluir produto', 500]);
+            return Response(['message' =>'Produto excluido', 200]);
 
         } catch (\Exception $e) {
             if (config('app.debug')) {

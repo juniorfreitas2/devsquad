@@ -50,3 +50,74 @@
         </div>
     </div>
 </div>
+<div class="panel-footer">
+    <div class="text-right">
+        <div v-if="edit">
+            <button type="button" v-if="!invalid" v-on:click="update" class="btn btn-w-md btn-success"> Editar</button>
+        </div>
+        <div v-else>
+            <button type="button" v-if="!invalid" v-on:click="submit" class="btn btn-w-md btn-success"> Salvar</button>
+        </div>
+    </div>
+</div>
+@section('js')
+    <script>
+        const app = new Vue({
+            el: '#app',
+            data: {
+                product:{
+                    pro_nome: "",
+                    pro_cat_id: "",
+                    pro_valor: "",
+                    pro_descricao: "",
+                    pro_imagem: ""
+                },
+                money: {
+                    decimal: ',',
+                    thousands: '.',
+                    prefix: 'R$ ',
+                    precision: 2,
+                    masked: false
+                },
+                edit:false,
+                currentLocation: '{{url('/produtos')}}'
+
+            },
+            methods:{
+                submit() {
+                    const isValid = this.$refs.observer.validate();
+
+                    if (!isValid) {
+                        return;
+                    }
+
+                    axios.post(this.currentLocation, this.product)
+                        .catch( () => { toastr.error("Erro ao salvar", 'Erro');
+                    });
+                },
+                update () {
+                    const isValid = this.$refs.observer.validate();
+
+                    if (!isValid) {
+                        return;
+                    }
+
+                    let url = this.currentLocation+'/'+this.product.pro_id;
+
+                    axios.put(url, this.product)
+                        .then( () => { toastr.success("Salvo com sucesso", 'Sucesso') })
+                        .catch( () => { toastr.error("Erro ao salvar", 'Erro') });
+                }
+            },
+            created () {
+                let produto = '{!!$produto!!}'
+
+                if(produto) {
+                    this.edit = true;
+                    this.product = JSON.parse(produto);
+                }
+
+            }
+        });
+    </script>
+@stop

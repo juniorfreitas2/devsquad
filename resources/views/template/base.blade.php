@@ -60,7 +60,20 @@
 <script src="{{asset('plugins/bootstrap/js/bootstrap.min.js')}}"></script>
 <script src="{{asset('plugins/toastr/toastr.min.js')}}"></script>
 <script src="{{asset('js/custom.js')}}"></script>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.29.2/sweetalert2.all.js"> </script>
 <script src="{{asset('js/app.js')}}"></script>
+<!-- App scripts -->
+<script>
+    var message = '{{ Session::has('success')}}'
+
+    if(message) {
+        toastr.success('{{ Session::get('success')}}', "Sucesso");
+    }
+    var error = '{{ Session::has('error')}}'
+    if(error) {
+        toastr.danger('{{ Session::get('error')}}', "Ooops!");
+    }
+</script>
 @yield('js')
 </body>
 

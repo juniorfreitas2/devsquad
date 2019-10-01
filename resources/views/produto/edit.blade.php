@@ -14,8 +14,7 @@
             <hr>
         </div>
     </div>
-    {!! Form::model($produto,["url" => url('/') . "/produtos/".$produto->pro_id, "method" => "PUT", "id" => "form", "role" => "form"]) !!}
+    <validation-observer ref="observer" tag="form" v-slot="{ invalid }">
         @include('produto.includes.form')
-        {!!Form::hidden('pro_id',$produto->pro_id) !!}
-    {!! Form::close() !!}
+    </validation-observer>
 @stop

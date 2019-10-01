@@ -1901,6 +1901,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1991,21 +1995,39 @@ __webpack_require__.r(__webpack_exports__);
       var url = currentLocation + '/' + rowData[this.primaryKey] + '/' + 'edit';
       window.location.replace(url);
     },
+    viewRow: function viewRow(rowData) {
+      var currentLocation = window.location;
+      var url = currentLocation + '/' + rowData[this.primaryKey];
+      window.location.replace(url);
+    },
     deleteRow: function deleteRow(rowData) {
-      var currentLocation = window.location.pathname;
-      var url = currentLocation + "/" + rowData[this.primaryKey];
-      axios["delete"](url).then(function (response) {
-        console.log(response);
-        toastr.success(response.message, 'Sucesso');
-      })["catch"](function (error) {
-        console.log(error);
-        toastr.success(error.message, 'Erro');
+      var _this = this;
+
+      Swal.fire({
+        title: "Deletar registro?",
+        text: "Seus registros não poderão ser recuperados!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#dc3545',
+        confirmButtonText: 'Sim, deletar registro!'
+      }).then(function (result) {
+        if (result.value) {
+          var currentLocation = window.location.pathname;
+          var url = currentLocation + "/" + rowData[_this.primaryKey];
+          axios["delete"](url).then(function () {
+            toastr.success('Registro deletado.', 'Sucesso!');
+
+            _this.$refs.vuetable.refresh();
+          })["catch"](function () {
+            return toastr.error('Erro ao deletar produto', 'Erro!');
+          });
+        }
       });
     }
   },
   created: function created() {
     this.assocFields();
-    console.log('sdjfbdb');
   }
 });
 
@@ -25612,6 +25634,19 @@ var render = function() {
                     _c(
                       "button",
                       {
+                        staticClass: "btn btn-success btn-sm",
+                        on: {
+                          click: function($event) {
+                            return _vm.viewRow(props.rowData)
+                          }
+                        }
+                      },
+                      [_c("span", { staticClass: "fa fa-eye" })]
+                    ),
+                    _vm._v("  \n\n                    "),
+                    _c(
+                      "button",
+                      {
                         staticClass: "btn btn-warning btn-sm",
                         on: {
                           click: function($event) {
@@ -25619,10 +25654,7 @@ var render = function() {
                           }
                         }
                       },
-                      [
-                        _c("span", { staticClass: "fa fa-pencil" }),
-                        _vm._v(" Edit\n                    ")
-                      ]
+                      [_c("span", { staticClass: "fa fa-pencil" })]
                     ),
                     _vm._v("  \n\n                    "),
                     _c(
@@ -25635,10 +25667,7 @@ var render = function() {
                           }
                         }
                       },
-                      [
-                        _c("span", { staticClass: "fa fa-trash" }),
-                        _vm._v(" Delete\n                    ")
-                      ]
+                      [_c("span", { staticClass: "fa fa-trash" })]
                     ),
                     _vm._v("  \n                ")
                   ])
@@ -39727,14 +39756,15 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*!**********************************************!*\
   !*** ./resources/js/components/DataGrid.vue ***!
   \**********************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DataGrid_vue_vue_type_template_id_7c40977b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DataGrid.vue?vue&type=template&id=7c40977b& */ "./resources/js/components/DataGrid.vue?vue&type=template&id=7c40977b&");
 /* harmony import */ var _DataGrid_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DataGrid.vue?vue&type=script&lang=js& */ "./resources/js/components/DataGrid.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _DataGrid_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DataGrid.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/DataGrid.vue?vue&type=style&index=0&lang=css&");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _DataGrid_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _DataGrid_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _DataGrid_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DataGrid.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/DataGrid.vue?vue&type=style&index=0&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -39766,7 +39796,7 @@ component.options.__file = "resources/js/components/DataGrid.vue"
 /*!***********************************************************************!*\
   !*** ./resources/js/components/DataGrid.vue?vue&type=script&lang=js& ***!
   \***********************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

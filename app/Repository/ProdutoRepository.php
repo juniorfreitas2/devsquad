@@ -12,4 +12,8 @@ class ProdutoRepository extends BaseRepository
         $this->model = $model;
     }
 
+    public function getProdutosFiltered()
+    {
+        return $this->model->orderBy('pro_nome','asc')->paginate(10);
+    }
 }

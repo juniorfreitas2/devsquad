@@ -21,6 +21,7 @@
         "vuetable-2": "^1.7.5"
     },
     "dependencies": {
+        "sweetalert2": "^8.18.0",
         "v-money": "^0.8.1",
         "vee-validate": "^3.0.8",
         "vue": "^2.6.10"

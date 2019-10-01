@@ -26,57 +26,8 @@
             <div class="panel-body" id="app">
                 <validation-observer ref="observer" tag="form" v-slot="{ invalid }">
                     @include('produto.includes.form')
-                    <div class="panel-footer">
-                        <div class="text-right">
-                            <button type="button" v-if="!invalid" v-on:click="submit" class="btn btn-w-md btn-success"> Salvar</button>
-                        </div>
-                    </div>
                 </validation-observer>
             </div>
         </div>
     </div>
-@stop
-@section('js')
-    <script>
-        const app = new Vue({
-            el: '#app',
-            data: {
-                product:{
-                    pro_nome: "",
-                    pro_cat_id: "",
-                    pro_valor: "",
-                    pro_descricao: "",
-                    pro_imagem: ""
-                },
-                money: {
-                    decimal: ',',
-                    thousands: '.',
-                    prefix: 'R$ ',
-                    precision: 2,
-                    masked: false
-                }
-
-            },
-            methods:{
-                 submit() {
-                    const isValid = this.$refs.observer.validate();
-                    if (!isValid) {
-                        return;
-                    }
-                     let currentLocation = '{{url('/produtos')}}';
-
-                     axios.post(currentLocation, this.product)
-                         .then(function(response){
-                             toastr.success(response.message, 'Sucesso');
-                             window.location.replace(currentLocation)
-                         })
-                         .catch(function (error) {
-                         console.log(error);
-                         toastr.error(error.message, 'Erro');
-                     });
-
-                }
-            }
-        });
-    </script>
 @stop

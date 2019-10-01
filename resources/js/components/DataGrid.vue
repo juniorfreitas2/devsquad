@@ -12,12 +12,16 @@
             >
                 <template slot="actions" scope="props">
                     <div class="table-button-container">
+                        <button class="btn btn-success btn-sm" @click="viewRow(props.rowData)">
+                            <span class="fa fa-eye"></span>
+                        </button>&nbsp;&nbsp;
+
                         <button class="btn btn-warning btn-sm" @click="editRow(props.rowData)">
-                            <span class="fa fa-pencil"></span> Edit
+                            <span class="fa fa-pencil"></span>
                         </button>&nbsp;&nbsp;
 
                         <button class="btn btn-danger btn-sm" @click="deleteRow(props.rowData)">
-                            <span class="fa fa-trash"></span> Delete
+                            <span class="fa fa-trash"></span>
                         </button>&nbsp;&nbsp;
                     </div>
                 </template>
@@ -124,19 +128,34 @@
 
                 window.location.replace(url)
             },
-            deleteRow(rowData){
-                let currentLocation = window.location.pathname;
-                let url = currentLocation+"/"+rowData[this.primaryKey];
+            viewRow(rowData){
+                let currentLocation = window.location;
+                let url = currentLocation+'/'+rowData[this.primaryKey];
 
-                axios.delete(url)
-                    .then(function (response) {
-                        console.log(response);
-                        toastr.success(response.message, 'Sucesso');
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                        toastr.error(error.message, 'Erro');
-                    })
+                window.location.replace(url)
+            },
+            deleteRow(rowData) {
+                Swal.fire({
+                    title: "Deletar registro?",
+                    text: "Seus registros não poderão ser recuperados!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#dc3545',
+                    confirmButtonText: 'Sim, deletar registro!'
+                }).then((result) => {
+                    if (result.value) {
+                        let currentLocation = window.location.pathname;
+                        let url = currentLocation + "/" + rowData[this.primaryKey];
+
+                        axios.delete(url)
+                            .then( () => {
+                                toastr.success('Registro deletado.', 'Sucesso!')
+                                this.$refs.vuetable.refresh();
+                            })
+                            .catch(() => toastr.error('Erro ao deletar produto', 'Erro!'))
+                    }
+                })
             }
         },
         created () {
