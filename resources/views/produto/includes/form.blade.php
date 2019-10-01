@@ -48,8 +48,5 @@
         <div class="form-group">
             <input name="pro_imagem" type="file" class="form-control-file" id="exampleFormControlFile1">
         </div>
-        @if($errors->has('pro_imagem'))
-            <span class="help-block">{{ $errors->first('pro_imagem') }}</span>
-        @endif
     </div>
 </div>

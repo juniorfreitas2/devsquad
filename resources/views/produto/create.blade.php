@@ -24,12 +24,11 @@
                 Formulário
             </div>
             <div class="panel-body" id="app">
-                <validation-observer ref="observer" tag="form" @submit.prevent="submit()" v-slot="{ invalid }">
-
+                <validation-observer ref="observer" tag="form" v-slot="{ invalid }">
                     @include('produto.includes.form')
                     <div class="panel-footer">
                         <div class="text-right">
-                            <button type="button" :disabled="invalid" :click="submit" class="btn btn-w-md btn-success"> Salvar</button>
+                            <button type="button" v-if="!invalid" v-on:click="submit" class="btn btn-w-md btn-success"> Salvar</button>
                         </div>
                     </div>
                 </validation-observer>
@@ -59,35 +58,25 @@
 
             },
             methods:{
-                async submit() {
-                    const isValid = await this.$refs.observer.validate();
+                 submit() {
+                    const isValid = this.$refs.observer.validate();
                     if (!isValid) {
-                        alert('nao');
+                        return;
                     }
-                    alert('sim');
+                     let currentLocation = '{{url('/produtos')}}';
+
+                     axios.post(currentLocation, this.product)
+                         .then(function(response){
+                             toastr.success(response.message, 'Sucesso');
+                             window.location.replace(currentLocation)
+                         })
+                         .catch(function (error) {
+                         console.log(error);
+                         toastr.error(error.message, 'Erro');
+                     });
+
                 }
-            },
-            created () {
-                console.log(this)
-                // this.teste();
             }
         });
-
-        //         function save() {
-        //
-        //             let data = $('#form').serializeArray();
-        // console.log(JSON.stringify(data))
-        //
-        //             axios.post('/produtos', JSON.stringify(data))
-        //                 .then(function (response) {
-        //                     console.log(response);
-        //                 })
-        //                 .catch(function (error) {
-        //                     console.log(error);
-        //                 })
-        //
-        //         }
-        //
-
     </script>
 @stop

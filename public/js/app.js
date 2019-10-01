@@ -1996,15 +1996,16 @@ __webpack_require__.r(__webpack_exports__);
       var url = currentLocation + "/" + rowData[this.primaryKey];
       axios["delete"](url).then(function (response) {
         console.log(response);
-        toastr.success(response[0].message, 'Sucesso');
+        toastr.success(response.message, 'Sucesso');
       })["catch"](function (error) {
         console.log(error);
-        toastr.success(error[0].message, 'Erro');
+        toastr.success(error.message, 'Erro');
       });
     }
   },
   created: function created() {
     this.assocFields();
+    console.log('sdjfbdb');
   }
 });
 
@@ -39681,7 +39682,7 @@ Object(vee_validate__WEBPACK_IMPORTED_MODULE_1__["extend"])('required', _objectS
 }));
 Vue.component('ValidationProvider', vee_validate__WEBPACK_IMPORTED_MODULE_1__["ValidationProvider"]);
 Vue.component('ValidationObserver', vee_validate__WEBPACK_IMPORTED_MODULE_1__["ValidationObserver"]);
-Vue.component('teste', _components_DataGrid_vue__WEBPACK_IMPORTED_MODULE_0__["default"]); // const app = new Vue({
+Vue.component('dataGrid', _components_DataGrid_vue__WEBPACK_IMPORTED_MODULE_0__["default"]); // const app = new Vue({
 //     el: '#app',
 //     data: {
 //         message: 'Hello Vue!'

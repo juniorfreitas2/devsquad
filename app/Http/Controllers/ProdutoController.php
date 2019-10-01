@@ -37,7 +37,7 @@ class ProdutoController extends BaseController
             if (!$produto)
                 return Response(['message' =>'Produto não existe', 500]);
 
-            return redirect()->route('produtos.index')->with('message', 'Produto Salvo');
+            return Response(['message' =>'Produto salvo com sucesso', 200]);
         } catch (\Exception $e) {
             if (config('app.debug')) {
                 throw $e;
@@ -67,11 +67,10 @@ class ProdutoController extends BaseController
                 return Response(['message' =>'Produto não existe', 500]);
 
 
-            if (!$produto->update($request->all())){
-                return redirect()->back()->withInput($request->all())->with('error', 'Erro ao atualizar');
-            }
+            if (!$produto->update($request->all()))
+                return Response(['message' =>'Erro ao atualizar Produto', 500]);
 
-            return redirect()->route('produtos.index')->with('message', 'Produto atualizado');
+            return Response(['message' =>'Produto salvo com sucesso', 200]);
         } catch (\Exception $e) {
             if (config('app.debug')) {
                 throw $e;

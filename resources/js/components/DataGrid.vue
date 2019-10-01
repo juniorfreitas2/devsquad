@@ -131,11 +131,11 @@
                 axios.delete(url)
                     .then(function (response) {
                         console.log(response);
-                        toastr.success(response[0].message, 'Sucesso');
+                        toastr.success(response.message, 'Sucesso');
                     })
                     .catch(function (error) {
                         console.log(error);
-                        toastr.success(error[0].message, 'Erro');
+                        toastr.error(error.message, 'Erro');
                     })
             }
         },

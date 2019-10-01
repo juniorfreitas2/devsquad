@@ -4,7 +4,7 @@ window.Vue = require('vue')
 
 const axios = require('axios');
 
-import ExampleComponent from './components/DataGrid.vue';
+import DataGrid from './components/DataGrid.vue';
 import { ValidationObserver, ValidationProvider, extend } from 'vee-validate';
 import { required } from 'vee-validate/dist/rules';
 import money from 'v-money'
@@ -18,7 +18,7 @@ extend('required', {
 
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
-Vue.component('teste', ExampleComponent);
+Vue.component('dataGrid', DataGrid);
 
 // const app = new Vue({
 //     el: '#app',

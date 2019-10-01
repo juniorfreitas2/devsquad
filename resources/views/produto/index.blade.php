@@ -19,13 +19,20 @@
         </div>
     </div>
 
-    <div class="panel">
+    <div class="panel" id="app">
         <div class="panel-body">
-            <teste
+            <data-grid
                 url="{{url('/all')}}"
                 primary-key="pro_id"
                 :custom-fields="{pro_nome: 'Produto', pro_valor: 'Preço', pro_cat_id: 'Categoria'}"
-            ></teste>
+            ></data-grid>
         </div>
     </div>
+@stop
+@section('js')
+    <script>
+        const app = new Vue({
+            el: '#app'
+        });
+    </script>
 @stop
