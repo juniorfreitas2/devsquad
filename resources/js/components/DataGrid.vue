@@ -1,16 +1,20 @@
 <template>
     <div class="">
+        <div class="col-md-12">
+            <data-grid-filter :filters="userFilters" @filter="getByFilter"></data-grid-filter>
+        </div>
         <div id="table-wrapper" class="ui container">
             <vuetable ref="vuetable"
                       :api-url="url"
                       :fields="fields"
                       :sort-order="sortOrder"
                       :css="css.table"
+                      :append-params="filters"
                       pagination-path=""
                       :per-page="3"
                       @vuetable:pagination-data="onPaginationData"
             >
-                <template slot="actions" scope="props">
+                <template slot="actions" scope="props" v-if="actionButtons">
                     <div class="table-button-container">
                         <button class="btn btn-success btn-sm" @click="viewRow(props.rowData)">
                             <span class="fa fa-eye"></span>
@@ -44,16 +48,19 @@
 <script>
     import Vuetable from 'vuetable-2/src/components/Vuetable.vue'
     import VuetablePagination from 'vuetable-2/src/components/VuetablePagination.vue'
+    import DataGridFilter from './DataGridFilter.vue'
 
     export default {
         components: {
             vuetable: Vuetable,
-            'vuetable-pagination': VuetablePagination
+            'vuetable-pagination': VuetablePagination,
+            dataGridFilter: DataGridFilter
         },
-        props: ['url', 'customFields', 'primaryKey'],
+        props: ['url', 'customFields', 'primaryKey', 'actionButtons', 'userFilters'],
         data () {
             return {
                 fields: [],
+                filters: {},
                 sortOrder: [
                     { field: 'name', direction: 'asc' }
                 ],
@@ -83,6 +90,18 @@
             }
         },
         methods: {
+            getByFilter (data) {
+                console.log(data)
+                this.filters[data.name] = data.value;
+                Vue.nextTick( () => this.$refs.vuetable.refresh() )
+            },
+            assocUserFilters () {
+                console.log(this.userFilters)
+                Object.keys(this.userFilters).map(filter => {
+                    this.$set(this.filters, filter, '')
+                    this.userFilters[filter].title = this.userFields[filter]
+                })
+            },
             assocFields () {
                 const customFields = this.customFields
                 for (let field in customFields) {
@@ -160,6 +179,7 @@
         },
         created () {
             this.assocFields();
+            this.assocUserFilters();
         }
     }
 </script>

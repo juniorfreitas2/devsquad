@@ -1862,6 +1862,7 @@ module.exports = function isBuffer (obj) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuetable_2_src_components_Vuetable_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuetable-2/src/components/Vuetable.vue */ "./node_modules/vuetable-2/src/components/Vuetable.vue");
 /* harmony import */ var vuetable_2_src_components_VuetablePagination_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuetable-2/src/components/VuetablePagination.vue */ "./node_modules/vuetable-2/src/components/VuetablePagination.vue");
+/* harmony import */ var _DataGridFilter_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DataGridFilter.vue */ "./resources/js/components/DataGridFilter.vue");
 //
 //
 //
@@ -1905,17 +1906,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     vuetable: vuetable_2_src_components_Vuetable_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
-    'vuetable-pagination': vuetable_2_src_components_VuetablePagination_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+    'vuetable-pagination': vuetable_2_src_components_VuetablePagination_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+    dataGridFilter: _DataGridFilter_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
-  props: ['url', 'customFields', 'primaryKey'],
+  props: ['url', 'customFields', 'primaryKey', 'actionButtons', 'userFilters'],
   data: function data() {
     return {
       fields: [],
+      filters: {},
       sortOrder: [{
         field: 'name',
         direction: 'asc'
@@ -1946,6 +1954,25 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    getByFilter: function getByFilter(data) {
+      var _this = this;
+
+      console.log(data);
+      this.filters[data.name] = data.value;
+      Vue.nextTick(function () {
+        return _this.$refs.vuetable.refresh();
+      });
+    },
+    assocUserFilters: function assocUserFilters() {
+      var _this2 = this;
+
+      console.log(this.userFilters);
+      Object.keys(this.userFilters).map(function (filter) {
+        _this2.$set(_this2.filters, filter, '');
+
+        _this2.userFilters[filter].title = _this2.userFields[filter];
+      });
+    },
     assocFields: function assocFields() {
       var customFields = this.customFields;
 
@@ -2001,7 +2028,7 @@ __webpack_require__.r(__webpack_exports__);
       window.location.replace(url);
     },
     deleteRow: function deleteRow(rowData) {
-      var _this = this;
+      var _this3 = this;
 
       Swal.fire({
         title: "Deletar registro?",
@@ -2014,11 +2041,11 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (result) {
         if (result.value) {
           var currentLocation = window.location.pathname;
-          var url = currentLocation + "/" + rowData[_this.primaryKey];
+          var url = currentLocation + "/" + rowData[_this3.primaryKey];
           axios["delete"](url).then(function () {
             toastr.success('Registro deletado.', 'Sucesso!');
 
-            _this.$refs.vuetable.refresh();
+            _this3.$refs.vuetable.refresh();
           })["catch"](function () {
             return toastr.error('Erro ao deletar produto', 'Erro!');
           });
@@ -2028,6 +2055,53 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.assocFields();
+    this.assocUserFilters();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DataGridFilter.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/DataGridFilter.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['filters'],
+  data: function data() {
+    return {
+      gridFilters: this.filters
+    };
+  },
+  methods: {
+    isInput: function isInput(type) {
+      return ['text', 'number'].indexOf(type) != -1;
+    },
+    emitFilterValue: function emitFilterValue(e) {
+      this.$emit('filter', {
+        name: e.target.name,
+        value: e.target.value
+      });
+    }
   }
 });
 
@@ -25612,6 +25686,18 @@ var render = function() {
   return _c("div", {}, [
     _c(
       "div",
+      { staticClass: "col-md-12" },
+      [
+        _c("data-grid-filter", {
+          attrs: { filters: _vm.userFilters },
+          on: { filter: _vm.getByFilter }
+        })
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
       { staticClass: "ui container", attrs: { id: "table-wrapper" } },
       [
         _c("vuetable", {
@@ -25621,60 +25707,67 @@ var render = function() {
             fields: _vm.fields,
             "sort-order": _vm.sortOrder,
             css: _vm.css.table,
+            "append-params": _vm.filters,
             "pagination-path": "",
             "per-page": 3
           },
           on: { "vuetable:pagination-data": _vm.onPaginationData },
-          scopedSlots: _vm._u([
-            {
-              key: "actions",
-              fn: function(props) {
-                return [
-                  _c("div", { staticClass: "table-button-container" }, [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-success btn-sm",
-                        on: {
-                          click: function($event) {
-                            return _vm.viewRow(props.rowData)
-                          }
-                        }
-                      },
-                      [_c("span", { staticClass: "fa fa-eye" })]
-                    ),
-                    _vm._v("  \n\n                    "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-warning btn-sm",
-                        on: {
-                          click: function($event) {
-                            return _vm.editRow(props.rowData)
-                          }
-                        }
-                      },
-                      [_c("span", { staticClass: "fa fa-pencil" })]
-                    ),
-                    _vm._v("  \n\n                    "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-danger btn-sm",
-                        on: {
-                          click: function($event) {
-                            return _vm.deleteRow(props.rowData)
-                          }
-                        }
-                      },
-                      [_c("span", { staticClass: "fa fa-trash" })]
-                    ),
-                    _vm._v("  \n                ")
-                  ])
-                ]
-              }
-            }
-          ])
+          scopedSlots: _vm._u(
+            [
+              _vm.actionButtons
+                ? {
+                    key: "actions",
+                    fn: function(props) {
+                      return [
+                        _c("div", { staticClass: "table-button-container" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-success btn-sm",
+                              on: {
+                                click: function($event) {
+                                  return _vm.viewRow(props.rowData)
+                                }
+                              }
+                            },
+                            [_c("span", { staticClass: "fa fa-eye" })]
+                          ),
+                          _vm._v("  \n\n                    "),
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-warning btn-sm",
+                              on: {
+                                click: function($event) {
+                                  return _vm.editRow(props.rowData)
+                                }
+                              }
+                            },
+                            [_c("span", { staticClass: "fa fa-pencil" })]
+                          ),
+                          _vm._v("  \n\n                    "),
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-danger btn-sm",
+                              on: {
+                                click: function($event) {
+                                  return _vm.deleteRow(props.rowData)
+                                }
+                              }
+                            },
+                            [_c("span", { staticClass: "fa fa-trash" })]
+                          ),
+                          _vm._v("  \n                ")
+                        ])
+                      ]
+                    }
+                  }
+                : null
+            ],
+            null,
+            true
+          )
         }),
         _vm._v(" "),
         _c("vuetable-pagination", {
@@ -25686,6 +25779,75 @@ var render = function() {
       1
     )
   ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DataGridFilter.vue?vue&type=template&id=08844cd3&":
+/*!*****************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/DataGridFilter.vue?vue&type=template&id=08844cd3& ***!
+  \*****************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    _vm._l(_vm.gridFilters, function(filter, index) {
+      return _c(
+        "div",
+        { key: index, class: "form-group col-md-" + filter.size },
+        [
+          _c("label", { staticClass: "label-control", attrs: { for: index } }, [
+            _vm._v(_vm._s(filter.title))
+          ]),
+          _vm._v(" "),
+          _vm.isInput(filter.type)
+            ? _c("input", {
+                staticClass: "form-control",
+                attrs: { type: "text", name: index, placeholder: filter.title },
+                on: { keyup: _vm.emitFilterValue }
+              })
+            : _vm._e(),
+          _vm._v(" "),
+          filter.type == "select"
+            ? _c(
+                "select",
+                {
+                  staticClass: "form-control",
+                  attrs: { name: index },
+                  on: { change: _vm.emitFilterValue }
+                },
+                [
+                  _c("option", { attrs: { value: "" } }, [_vm._v("All")]),
+                  _vm._v(" "),
+                  _vm._l(filter.options, function(option, index) {
+                    return _c(
+                      "option",
+                      { key: index, domProps: { value: index } },
+                      [_vm._v(_vm._s(option))]
+                    )
+                  })
+                ],
+                2
+              )
+            : _vm._e()
+        ]
+      )
+    }),
+    0
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -39756,15 +39918,14 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*!**********************************************!*\
   !*** ./resources/js/components/DataGrid.vue ***!
   \**********************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DataGrid_vue_vue_type_template_id_7c40977b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DataGrid.vue?vue&type=template&id=7c40977b& */ "./resources/js/components/DataGrid.vue?vue&type=template&id=7c40977b&");
 /* harmony import */ var _DataGrid_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DataGrid.vue?vue&type=script&lang=js& */ "./resources/js/components/DataGrid.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _DataGrid_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _DataGrid_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _DataGrid_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DataGrid.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/DataGrid.vue?vue&type=style&index=0&lang=css&");
+/* empty/unused harmony star reexport *//* harmony import */ var _DataGrid_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DataGrid.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/DataGrid.vue?vue&type=style&index=0&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -39796,7 +39957,7 @@ component.options.__file = "resources/js/components/DataGrid.vue"
 /*!***********************************************************************!*\
   !*** ./resources/js/components/DataGrid.vue?vue&type=script&lang=js& ***!
   \***********************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39835,6 +39996,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DataGrid_vue_vue_type_template_id_7c40977b___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DataGrid_vue_vue_type_template_id_7c40977b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/DataGridFilter.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/components/DataGridFilter.vue ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _DataGridFilter_vue_vue_type_template_id_08844cd3___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DataGridFilter.vue?vue&type=template&id=08844cd3& */ "./resources/js/components/DataGridFilter.vue?vue&type=template&id=08844cd3&");
+/* harmony import */ var _DataGridFilter_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DataGridFilter.vue?vue&type=script&lang=js& */ "./resources/js/components/DataGridFilter.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _DataGridFilter_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _DataGridFilter_vue_vue_type_template_id_08844cd3___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _DataGridFilter_vue_vue_type_template_id_08844cd3___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/DataGridFilter.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/DataGridFilter.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/DataGridFilter.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DataGridFilter_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./DataGridFilter.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DataGridFilter.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DataGridFilter_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/DataGridFilter.vue?vue&type=template&id=08844cd3&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/DataGridFilter.vue?vue&type=template&id=08844cd3& ***!
+  \***********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DataGridFilter_vue_vue_type_template_id_08844cd3___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./DataGridFilter.vue?vue&type=template&id=08844cd3& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DataGridFilter.vue?vue&type=template&id=08844cd3&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DataGridFilter_vue_vue_type_template_id_08844cd3___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DataGridFilter_vue_vue_type_template_id_08844cd3___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

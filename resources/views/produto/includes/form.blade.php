@@ -50,7 +50,7 @@
         </div>
     </div>
 </div>
-<div class="panel-footer">
+<div class="">
     <div class="text-right">
         <div v-if="edit">
             <button type="button" v-if="!invalid" v-on:click="update" class="btn btn-w-md btn-success"> Editar</button>
@@ -92,6 +92,7 @@
                     }
 
                     axios.post(this.currentLocation, this.product)
+                        .then( () => { window.location.replace(this.currentLocation) })
                         .catch( () => { toastr.error("Erro ao salvar", 'Erro');
                     });
                 },

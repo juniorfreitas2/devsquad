@@ -16,4 +16,8 @@ Route::get('/', function () {
 });
 
 Route::resource('produtos','ProdutoController');
-Route::get('all','ProdutoController@all');
+Route::get('categorias','CategoriaController@index');
+
+//API
+Route::get('api/produtos','ProdutoController@all');
+Route::get('api/categorias','CategoriaController@all');

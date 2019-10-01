@@ -12,8 +12,13 @@ class ProdutoRepository extends BaseRepository
         $this->model = $model;
     }
 
-    public function getProdutosFiltered()
+    public function getProdutosFiltered($filter)
     {
-        return $this->model->orderBy('pro_nome','asc')->paginate(10);
+        $data = $this->model;
+
+        if(isset($filter['pro_nome']) && !empty($filter['pro_nome']))
+            $data = $data->where('pro_nome', 'ilike', '%'.$filter['pro_nome'].'%');
+
+        return $data->orderBy('pro_nome','asc')->paginate(10);
     }
 }

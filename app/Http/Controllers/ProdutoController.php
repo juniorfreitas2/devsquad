@@ -18,16 +18,18 @@ class ProdutoController extends BaseController
         $this->categoriaRepository = $categoriaRepository;
     }
 
-    public function all()
+    public function all(Request $request)
     {
-        $produtos = $this->produtoRepository->getProdutosFiltered();
+        $produtos = $this->produtoRepository->getProdutosFiltered($request->all());
 
         return Response($produtos, 200);
     }
 
     public function index(Request $request)
     {
-        return view('produto.index');
+        $categorias = $this->categoriaRepository->all()->pluck('cat_nome', 'cat_id');
+
+        return view('produto.index', compact('categorias'));
     }
 
     public function create()
@@ -46,7 +48,9 @@ class ProdutoController extends BaseController
             if (!$produto)
                 return Response(['message' =>'Produto não existe', 500]);
 
-            return redirect()->route('produtos.show', [$produto->pro_id])->with('message', 'Salvo com sucesso');
+            $request->session()->flash('success', 'Salvo com sucesso');
+
+            return Response(['message' =>'Produto salvo', 200]);
         } catch (\Exception $e) {
             if (config('app.debug')) {
                 throw $e;

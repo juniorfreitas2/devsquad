@@ -8,11 +8,8 @@
                     <i class="fa fa-cube"></i>
                 </div>
                 <div class="header-title">
-                    <h3 class="m-b-xs">Produtos</h3>
-                    <small>Lista de Produtos</small>
-                </div>
-                <div class="text-right">
-                    <a href="{{url('/produtos/create')}}" class="btn btn-w-md btn-primary">Novo</a>
+                    <h3 class="m-b-xs">Categorias</h3>
+                    <small>Lista de categorias</small>
                 </div>
             </div>
             <hr>
@@ -20,14 +17,12 @@
     </div>
 
     <div class="panel" id="app">
-
         <div class="panel-body">
             <data-grid
-                url="{{url('api/produtos')}}"
-                primary-key="pro_id"
-                :custom-fields="{pro_nome: 'Produto', pro_valor: 'Preço', pro_cat_id: 'Categoria'}"
-                action-buttons=false
-                :user-filters="{ pro_nome: {type: 'text', size: 6} }"
+                url="{{url('api/categorias')}}"
+                primary-key="cat_id"
+                :custom-fields="{cat_nome: 'Categoria'}"
+                :user-filters="{ cat_nome: {type: 'text', size: 6} }"
             ></data-grid>
         </div>
     </div>
