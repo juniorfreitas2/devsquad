@@ -22,9 +22,9 @@
     <div class="panel">
         <div class="panel-body">
             <teste
-                    url="{{url('/all')}}"
-                    primary-key="pro_id"
-                    :user-fields="{pro_nome: 'Produto', pro_valor: 'Preço', pro_cat_id: 'Categoria'}"
+                url="{{url('/all')}}"
+                primary-key="pro_id"
+                :custom-fields="{pro_nome: 'Produto', pro_valor: 'Preço', pro_cat_id: 'Categoria'}"
             ></teste>
         </div>
     </div>

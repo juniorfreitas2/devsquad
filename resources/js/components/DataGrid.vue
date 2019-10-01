@@ -31,6 +31,12 @@
     </div>
 </template>
 
+<style>
+    .data-grid-actions {
+        width: 15%;
+    }
+</style>
+
 <script>
     import Vuetable from 'vuetable-2/src/components/Vuetable.vue'
     import VuetablePagination from 'vuetable-2/src/components/VuetablePagination.vue'
@@ -40,7 +46,7 @@
             vuetable: Vuetable,
             'vuetable-pagination': VuetablePagination
         },
-        props: ['url', 'userFields', 'primaryKey'],
+        props: ['url', 'customFields', 'primaryKey'],
         data () {
             return {
                 fields: [],
@@ -74,11 +80,11 @@
         },
         methods: {
             assocFields () {
-                const userFields = this.userFields
-                for (let field in userFields) {
+                const customFields = this.customFields
+                for (let field in customFields) {
                     let fieldInfo = {
                         name: field,
-                        title: userFields[field],
+                        title: customFields[field],
                         dataClass: this.getDataClass(field),
                         titleClass: this.getFieldClass(field)
                     }
@@ -88,11 +94,11 @@
 
                     this.fields.push(fieldInfo)
                 }
-                // this.fields.push({
-                //     name: '__slot:actions',
-                //     title: '#',
-                //     dataClass: 'data-grid-actions'
-                // })
+                this.fields.push({
+                    name: '__slot:actions',
+                    title: '#',
+                    dataClass: 'data-grid-actions'
+                })
             },
             getDataClass (field) {
                 if (this.dataCss) {
@@ -113,15 +119,28 @@
                 this.$refs.vuetable.changePage(page)
             },
             editRow(rowData){
-                alert("You clicked edit on"+ JSON.stringify(rowData))
+                let currentLocation = window.location;
+                let url = currentLocation+'/'+rowData[this.primaryKey]+'/'+'edit';
+
+                window.location.replace(url)
             },
             deleteRow(rowData){
-                alert("You clicked delete on"+ JSON.stringify(rowData))
-            },
-            created () {
-                this.assocFields();
-                // this.assocUserFilters()
+                let currentLocation = window.location.pathname;
+                let url = currentLocation+"/"+rowData[this.primaryKey];
+
+                axios.delete(url)
+                    .then(function (response) {
+                        console.log(response);
+                        toastr.success(response[0].message, 'Sucesso');
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        toastr.success(error[0].message, 'Erro');
+                    })
             }
+        },
+        created () {
+            this.assocFields();
         }
     }
 </script>

@@ -19,8 +19,6 @@ class ProdutoController extends BaseController
 
     public function index()
     {
-        $produtos = $this->produtoRepository->all();
-
         return view('produto.index', compact('produtos'));
     }
 
@@ -35,17 +33,16 @@ class ProdutoController extends BaseController
     {
         try {
             $produto = $this->produtoRepository->create($request->all());
-            
-            if (!$produto) {
-                return redirect()->back()->withInput($request->all())->with('error', 'Produto não existe');
-            }
-            
+
+            if (!$produto)
+                return Response(['message' =>'Produto não existe', 500]);
+
             return redirect()->route('produtos.index')->with('message', 'Produto Salvo');
         } catch (\Exception $e) {
             if (config('app.debug')) {
                 throw $e;
             }
-            return redirect()->back()->with('error', 'Erro ao tentar salvar. Caso o problema persista, entre em contato com o suporte.');
+            return Response(['message' =>'Erro ao tentar salvar. Caso o problema persista, entre em contato com o suporte.', 500]);
         }
     }
 
@@ -53,9 +50,8 @@ class ProdutoController extends BaseController
     {
         $produto = $this->produtoRepository->find($id);
 
-        if (!$produto) {
-            return redirect()->back()->with('error', 'Produto não existe');
-        }
+        if (!$produto)
+            return Response(['message' =>'Produto não existe', 500]);
 
         $categorias = $this->categoriaRepository->all()->pluck('cat_nome', 'cat_id');
 
@@ -67,9 +63,9 @@ class ProdutoController extends BaseController
         try {
             $produto = $this->produtoRepository->find($id);
 
-            if (!$produto) {
-                return redirect()->back()->withInput($request->all())->with('error', 'Produto não existe');
-            }
+            if (!$produto)
+                return Response(['message' =>'Produto não existe', 500]);
+
 
             if (!$produto->update($request->all())){
                 return redirect()->back()->withInput($request->all())->with('error', 'Erro ao atualizar');
@@ -80,7 +76,7 @@ class ProdutoController extends BaseController
             if (config('app.debug')) {
                 throw $e;
             } else {
-                return redirect()->back()->with('error', 'Erro ao tentar salvar. Caso o problema persista, entre em contato com o suporte.');
+                return Response(['message' =>'Erro ao tentar salvar. Caso o problema persista, entre em contato com o suporte.', 500]);
             }
         }
 
@@ -89,17 +85,17 @@ class ProdutoController extends BaseController
     public function destroy($id)
     {
         try {
-            if ($this->produtoRepository->delete($id)) {
-                return redirect()->back()->with('message', 'Produto excluido');
-            } else {
-                return redirect()->back()->with('error', 'Erro ao excluir');
-            }
-            
+
+            if (!$this->produtoRepository->delete($id))
+                return Response(['message' =>'Produto excluido', 200]);
+
+            return Response(['message' =>'Erro ao  excluir produto', 500]);
+
         } catch (\Exception $e) {
             if (config('app.debug')) {
                 throw $e;
             } else {
-                return redirect()->back()->with('error', 'Erro ao tentar salvar. Caso o problema persista, entre em contato com o suporte.');
+                return Response(['message' =>'Erro ao tentar salvar. Caso o problema persista, entre em contato com o suporte.', 500]);
             }
         }
     }

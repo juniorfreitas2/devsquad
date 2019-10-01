@@ -28,6 +28,12 @@
         .content > div {
             opacity: unset;
         }
+        ul>li{
+            list-style-type: none;
+        }
+        ul{
+            padding-left: 5px !important;
+        }
     </style>
     @yield('css')
 </head>
@@ -55,17 +61,6 @@
 <script src="{{asset('plugins/toastr/toastr.min.js')}}"></script>
 <script src="{{asset('js/custom.js')}}"></script>
 <script src="{{asset('js/app.js')}}"></script>
-<!-- App scripts -->
-<script>
-    var message = '{{ Session::has('message')}}'
-    if(message) {
-        toastr.success('{{ Session::get('message')}}', "Sucesso");
-    }
-    var error = '{{ Session::has('error')}}'
-    if(error) {
-        toastr.danger('{{ Session::get('error')}}', "Ooops!");
-    }
-</script>
 @yield('js')
 </body>
 
