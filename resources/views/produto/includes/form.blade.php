@@ -46,7 +46,7 @@
     {!! Form::label('pro_imagem', 'Adicione uma imagem', ['class' => 'control-label']) !!}
     <div class=" form-group ">
         <div class="form-group">
-            <input name="pro_imagem" type="file" class="form-control-file" id="exampleFormControlFile1">
+            <input name="pro_imagem" v-model="product.pro_imagem" type="file" class="form-control-file" id="exampleFormControlFile1">
         </div>
     </div>
 </div>
@@ -92,7 +92,7 @@
                     }
 
                     axios.post(this.currentLocation, this.product)
-                        .then( () => { window.location.replace(this.currentLocation) })
+                        .then( () => {  })
                         .catch( () => { toastr.error("Erro ao salvar", 'Erro');
                     });
                 },

@@ -21,4 +21,6 @@ class ProdutoRepository extends BaseRepository
 
         return $data->orderBy('pro_nome','asc')->paginate(10);
     }
+
+
 }

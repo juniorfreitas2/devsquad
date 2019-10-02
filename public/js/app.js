@@ -1957,7 +1957,6 @@ __webpack_require__.r(__webpack_exports__);
     getByFilter: function getByFilter(data) {
       var _this = this;
 
-      console.log(data);
       this.filters[data.name] = data.value;
       Vue.nextTick(function () {
         return _this.$refs.vuetable.refresh();
@@ -1966,7 +1965,6 @@ __webpack_require__.r(__webpack_exports__);
     assocUserFilters: function assocUserFilters() {
       var _this2 = this;
 
-      console.log(this.userFilters);
       Object.keys(this.userFilters).map(function (filter) {
         _this2.$set(_this2.filters, filter, '');
 

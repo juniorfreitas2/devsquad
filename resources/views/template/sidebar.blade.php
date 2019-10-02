@@ -15,7 +15,10 @@
                 <a href="{{url('/categorias')}}">Categorias</a>
             </li>
             <li class="">
-                <a href="{{url('/usuarios')}}">Usuarios</a>
+                <a href="{{url('/landingpage')}}">Landing page</a>
+            </li>
+            <li class="">
+                <a href="{{url('#')}}">Usuarios</a>
             </li>
         </ul>
     </nav>

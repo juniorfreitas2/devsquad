@@ -14,6 +14,9 @@
 Route::get('/', function () {
     return view('dashboard');
 });
+Route::get('/landingpage', function () {
+    return view('landingpage');
+});
 
 Auth::routes();
 

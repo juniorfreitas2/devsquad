@@ -91,12 +91,10 @@
         },
         methods: {
             getByFilter (data) {
-                console.log(data)
                 this.filters[data.name] = data.value;
                 Vue.nextTick( () => this.$refs.vuetable.refresh() )
             },
             assocUserFilters () {
-                console.log(this.userFilters)
                 Object.keys(this.userFilters).map(filter => {
                     this.$set(this.filters, filter, '')
                     this.userFilters[filter].title = this.userFields[filter]
