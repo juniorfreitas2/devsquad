@@ -46,7 +46,7 @@
     {!! Form::label('pro_imagem', 'Adicione uma imagem', ['class' => 'control-label']) !!}
     <div class=" form-group ">
         <div class="form-group">
-            <input name="pro_imagem" v-model="product.pro_imagem" type="file" class="form-control-file" id="exampleFormControlFile1">
+            <input name="pro_imagem" v-on:change="onImageChange" type="file" class="form-control-file" id="exampleFormControlFile1">
         </div>
     </div>
 </div>
@@ -84,6 +84,10 @@
 
             },
             methods:{
+                onImageChange(e){
+                    console.log(e.target.files[0]);
+                    this.product.pro_imagem = e.target.files[0];
+                },
                 submit() {
                     const isValid = this.$refs.observer.validate();
 
@@ -91,8 +95,16 @@
                         return;
                     }
 
-                    axios.post(this.currentLocation, this.product)
-                        .then( () => {  })
+                    var formData = new FormData();
+
+                    Object.keys(this.product).map(item => {
+                        formData.append(item, this.product[item])
+                    })
+
+                    axios.post(this.currentLocation, formData, {
+                        headers: { 'content-type': 'multipart/form-data' }
+                    })
+                        .then( () => { window.location.replace(this.currentLocation) })
                         .catch( () => { toastr.error("Erro ao salvar", 'Erro');
                     });
                 },

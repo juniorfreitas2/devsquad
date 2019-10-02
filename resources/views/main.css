@@ -1,0 +1,19 @@
+/* Overrinding */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1640px;
+    }
+}
+
+.navbar {
+    padding: 11px;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    opacity: 1;
+}
+
+.jumbotron {
+    background: url(../images/austin-distel-wawEfYdpkag-unsplash.png);
+    height: calc(100vh - 95px);
+    background-repeat: no-repeat;
+    border-radius: 0;
+}

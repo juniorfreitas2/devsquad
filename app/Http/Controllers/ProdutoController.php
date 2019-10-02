@@ -43,7 +43,7 @@ class ProdutoController extends BaseController
     public function store(ProdutoRequest $request)
     {
         try {
-            $produto = $this->produtoRepository->create($request->all());
+            $produto = $this->produtoRepository->create($request);
 
             if (!$produto)
                 return Response(['message' =>'Produto não existe', 500]);

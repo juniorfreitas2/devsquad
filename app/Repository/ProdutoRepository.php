@@ -22,5 +22,18 @@ class ProdutoRepository extends BaseRepository
         return $data->orderBy('pro_nome','asc')->paginate(10);
     }
 
+    public function create($request)
+    {
+        if(!$request->pro_imagem)
+            return $this->model->create($request->all());
+
+        $imageName = time().'.'.$request->pro_imagem->getClientOriginalExtension();
+        $request->pro_imagem->move(public_path('images'), $imageName);
+
+        $request['pro_imagem'] = $imageName;
+
+        return $this->model->create($request->all());
+    }
+
 
 }
