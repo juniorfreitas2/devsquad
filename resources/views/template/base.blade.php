@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900' rel='stylesheet' type='text/css'>
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Page title -->
     <title>DevSquad | Desafio</title>
 

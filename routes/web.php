@@ -15,9 +15,13 @@ Route::get('/', function () {
     return view('dashboard');
 });
 
-Route::resource('produtos','ProdutoController');
-Route::get('categorias','CategoriaController@index');
+Auth::routes();
+
+Route::resource('produtos','ProdutoController')->middleware('auth');
+Route::get('categorias','CategoriaController@index')->middleware('auth');
 
 //API
 Route::get('api/produtos','ProdutoController@all');
 Route::get('api/categorias','CategoriaController@all');
+
+Route::get('/home', 'HomeController@index')->name('home');
