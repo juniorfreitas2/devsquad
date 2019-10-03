@@ -40,13 +40,32 @@ class ProdutoController extends BaseController
         return view('produto.create', compact('categorias', 'produto'));
     }
 
+    public function import(Request $request)
+    {
+        try {
+            $produto = $this->produtoRepository->import($request);
+
+            if (!$produto)
+                return Response(['message' =>'Erro ao importar', 500]);
+
+            $request->session()->flash('success', 'Importado com sucesso');
+
+            return Response(['message' =>'Produto importado', 200]);
+        } catch (\Exception $e) {
+            if (config('app.debug')) {
+                throw $e;
+            }
+            return Response(['message' =>'Erro ao tentar salvar. Caso o problema persista, entre em contato com o suporte.', 500]);
+        }
+    }
+
     public function store(ProdutoRequest $request)
     {
         try {
             $produto = $this->produtoRepository->create($request);
 
             if (!$produto)
-                return Response(['message' =>'Produto não existe', 500]);
+                return Response(['message' =>'Erro ao salvar produto', 500]);
 
             $request->session()->flash('success', 'Salvo com sucesso');
 

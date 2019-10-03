@@ -85,7 +85,6 @@
             },
             methods:{
                 onImageChange(e){
-                    console.log(e.target.files[0]);
                     this.product.pro_imagem = e.target.files[0];
                 },
                 submit() {
@@ -118,8 +117,7 @@
                     let url = this.currentLocation+'/'+this.product.pro_id;
 
                     axios.put(url, this.product)
-                        .then( () => { toastr.success("Salvo com sucesso", 'Sucesso') })
-                        .catch( () => { toastr.error("Erro ao salvar", 'Erro') });
+cd ..
                 }
             },
             created () {

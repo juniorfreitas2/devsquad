@@ -25,6 +25,7 @@ Route::get('categorias','CategoriaController@index')->middleware('auth');
 
 //API
 Route::get('api/produtos','ProdutoController@all');
+Route::post('api/import','ProdutoController@import');
 Route::get('api/categorias','CategoriaController@all');
 
 Route::get('/home', 'HomeController@index')->name('home');
